@@ -1,46 +1,16 @@
+import random
 
-def timsort(arr):
-    min_run = 32
-    n = len(arr)
+def is_sorted(arr):
+    """Check if the array is sorted."""
+    return all(arr[i] <= arr[i + 1] for i in range(len(arr) - 1))
 
-    for i in range(0, n, min_run):
-        insertion_sort(arr, i, min((i + min_run - 1), n - 1))
-
-    size = min_run
-    while size < n:
-        for left in range(0, n, 2 * size):
-            mid = left + size - 1
-            right = min((left + 2 * size - 1), (n - 1))
-            merge(arr, left, mid, right)
-        size = 2 * size
-
-def insertion_sort(arr, left, right):
-    for i in range(left + 1, right + 1):
-        temp = arr[i]
-        j = i - 1
-        while j >= left and temp < arr[j]:
-            arr[j], arr[j + 1] = arr[j + 1], arr[j]
-            j -= 1
-        arr[j + 1] = temp
-
-def merge(arr, left, mid, right):
-    if arr[mid] <= arr[mid + 1]:
-        return
-    left_half = arr[left:mid + 1]
-    right_half = arr[mid + 1:right + 1]
-    k = left
-    i = j = 0
-    while i < len(left_half) and j < len(right_half):
-        if left_half[i] <= right_half[j]:
-            arr[k] = left_half[i]
-            i += 1
-        else:
-            arr[k] = right_half[j]
-            j += 1
-        k += 1
-    arr[k:right + 1] = left_half[i:] + right_half[j:]
+def bogo_sort(arr):
+    """Shuffle the array until it is sorted (extremely inefficient)."""
+    while not is_sorted(arr):
+        random.shuffle(arr)
+    return arr
 
 # Example usage
-arr = [64, 34, 25, 12, 22, 11, 90]
-timsort(arr)
-print("Sorted array:", arr)
+arr = [3, 1, 4, 1, 5, 9, 2, 6]
+sorted_arr = bogo_sort(arr)
+print("Sorted Array:", sorted_arr)
