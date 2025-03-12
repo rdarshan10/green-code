@@ -1,6 +1,7 @@
 {
-  "name": "tcs",
+  "name": "green-code",
   "version": "1.0.0",
+  "description": "A brief description of your project, highlighting its purpose and functionality.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +10,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "husky": "^8.0.0"
   }
