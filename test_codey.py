@@ -17,11 +17,11 @@ def timsort(arr):
 def insertion_sort(arr, left, right):
     for i in range(left + 1, right + 1):
         temp = arr[i]
-        j = i
-        while j > left and temp < arr[j - 1]:
-            arr[j] = arr[j - 1]
+        j = i - 1
+        while j >= left and temp < arr[j]:
+            arr[j + 1] = arr[j]
             j -= 1
-        arr[j] = temp
+        arr[j + 1] = temp
 
 def merge(arr, left, mid, right):
     if arr[mid] <= arr[mid + 1]:
