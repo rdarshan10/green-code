@@ -19,7 +19,7 @@ def insertion_sort(arr, left, right):
         temp = arr[i]
         j = i - 1
         while j >= left and temp < arr[j]:
-            arr[j + 1] = arr[j]
+            arr[j], arr[j + 1] = arr[j + 1], arr[j]
             j -= 1
         arr[j + 1] = temp
 
