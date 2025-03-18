@@ -19,9 +19,8 @@ def insertion_sort(arr, left, right):
         key = arr[i]
         j = i - 1
         while j >= left and arr[j] > key:
-            arr[j + 1] = arr[j]
+            arr[j], arr[j + 1] = arr[j + 1], arr[j]
             j -= 1
-        arr[j + 1] = key
 
 def merge(arr, left, mid, right):
     if arr[mid] <= arr[mid + 1]:
