@@ -1,4 +1,3 @@
-
 def timsort(arr):
     min_run = 32
     n = len(arr)
@@ -22,6 +21,9 @@ def insertion_sort(arr, left, right):
             arr[j], arr[j + 1] = arr[j + 1], arr[j]
             j -= 1
 
+def revant(x):
+    return x**2
+
 def merge(arr, left, mid, right):
     if arr[mid] <= arr[mid + 1]:
         return
@@ -39,7 +41,6 @@ def merge(arr, left, mid, right):
         k += 1
     arr[k:right + 1] = left_half[i:] + right_half[j:]
 
-# Example usage
 arr = [64, 34, 25, 12, 22, 11, 90]
 timsort(arr)
 print("Sorted array:", arr)
