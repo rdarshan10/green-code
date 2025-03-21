@@ -3,24 +3,10 @@ def calculate_sum(numbers):
 
 def create_large_list():
     return list(range(1000))
+
 def find_duplicates(data):
-    # Inefficient way to find duplicates
-    duplicates = []
-    for i in range(len(data)):
-        for j in range(i+1, len(data)):
-            if data[i] == data[j] and data[i] not in duplicates:
-                duplicates.append(data[i])
-    return duplicates
-    
-def find_duplicates(data):
-    # Inefficient way to find duplicates
-    duplicates = []
-    for i in range(len(data)):
-        for j in range(i+1, len(data)):
-            if data[i] == data[j] and data[i] not in duplicates:
-                duplicates.append(data[i])
-    return duplicates
-# Also modify main() to use this function:
+    return list(set([x for x in data if data.count(x) > 1]))
+
 def main():
     numbers = create_large_list()
     total = calculate_sum(numbers)
