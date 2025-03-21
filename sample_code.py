@@ -1,44 +1,104 @@
+# 1. First, create and commit an initial version of a Python file
+
+# Initial version of sample_code.py
 def calculate_sum(numbers):
-    return sum(numbers)
-
+    # Inefficient way to sum numbers
+    total = 0
+    for num in numbers:
+        total = total + num
+    return total
+def calculate_sum(numbers):
+    # Inefficient way to sum numbers
+    total = 0
+    for num in numbers:
+        total = total + num
+    return totaldef calculate_sum(numbers):
+    # Inefficient way to sum numbers
+    total = 0
+    for num in numbers:
+        total = total + num
+    return totaldef calculate_sum(numbers):
+    # Inefficient way to sum numbers
+    total = 0
+    for num in numbers:
+        total = total + num
+    return total
 def create_large_list():
-    return list(range(1000))
-
+    # Inefficient list creation
+    result = []
+    for i in range(1000):
+        result.append(i)
+    return result
 def find_duplicates(data):
-    count_dict = {}
-    for num in data:
-        if num in count_dict:
-            count_dict[num] += 1
-        else:
-            count_dict[num] = 1
-    return [x for x, y in count_dict.items() if y > 1]
-
+    # Inefficient way to find duplicates
+    duplicates = []
+    for i in range(len(data)):
+        for j in range(i+1, len(data)):
+            if data[i] == data[j] and data[i] not in duplicates:
+                duplicates.append(data[i])
+    return duplicates''
+    '    return result
+def find_duplicates(data):
+    # Inefficient way to find duplicates
+    duplicates = []
+    for i in range(len(data)):
+        for j in range(i+1, len(data)):
+            if data[i] == data[j] and data[i] not in duplicates:
+                duplicates.append(data[i])
+    return duplicates
+def find_duplicates(data):
+    # Inefficient way to find duplicates
+    duplicates = []
+    for i in range(len(data)):
+        for j in range(i+1, len(data)):
+            if data[i] == data[j] and data[i] not in duplicates:
+                duplicates.append(data[i])
+    return duplicates
+def find_duplicates(data):
+    # Inefficient way to find duplicates
+    duplicates = []
+    for i in range(len(data)):
+        for j in range(i+1, len(data)):
+            if data[i] == data[j] and data[i] not in duplicates:
+                duplicates.append(data[i])
+    return duplicates
+# Also modify main() to use this function:
 def main():
     numbers = create_large_list()
     total = calculate_sum(numbers)
     dupes = find_duplicates([1, 2, 3, 1, 4, 2, 5])
     print(f"Sum: {total}")
     print(f"Duplicates: {dupes}")
+    def main():
+    numbers = create_large_list()
+    total = calculate_sum(numbers)
+    dupes = find_duplicates([1, 2, 3, 1, 4, 2, 5])
+    print(f"Sum: {total}")
+      def main():
+    numbers = create_large_list()
+    total = calculate_sum(numbers)
+    dupes = find_duplicates([1, 2, 3, 1, 4, 2, 5])
+    print(f"Sum: {total}")
+    print(f"Duplicates: {dupes}")
+      def main():
+    numbers = create_large_list()
+    total = calculate_sum(numbers)
+    dupes = find_duplicates([1, 2, 3, 1, 4, 2, 5])
+    print(f"Sum: {total}")
+    print(f"Duplicates: {dupes}")
+    print(f"Duplicates: {dupes}")
+def main():
+    numbers = create_large_list()
+    total = calculate_sum(numbers)
+    print(f"Sum: {total}")
+
+    def main():
+    numbers = create_large_list()
+    total = calculate_sum(numbers)
+    print(f"Sum: {total}")def main():
+    numbers = create_large_list()
+    total = calculate_sum(numbers)
+    print(f"Sum: {total}")
 
 if __name__ == "__main__":
     main()
-
-# SUSTAINABLE CHANGES SUGGESTED:
-'''
-Here are the improved versions of the code changes, focusing on sustainability and efficiency:
-
-**Improved Code Changes:**
-from collections import Counter
-
-return [x for x, count in Counter(data).items() if count > 1]
-
-**Rationale:**
-
-1. **Reducing computational complexity:** The original code has a time complexity of O(n^2) due to the `data.count(x)` operation inside the list comprehension. By using the `Counter` class from the `collections` module, we can reduce the complexity to O(n), as it uses a hash table to count the occurrences of each element.
-2. **Minimizing memory usage:** The original code creates a `set` and a `dict` to store the count of each element. The `Counter` class is more memory-efficient, as it uses a single data structure to store the counts.
-3. **Improving energy efficiency:** By reducing the computational complexity and memory usage, we can reduce the energy consumption of the code.
-4. **Using more efficient algorithms and data structures:** The `Counter` class is a more efficient data structure for counting elements than a manual implementation using a `dict`.
-5. **Reducing redundant operations:** The original code has redundant operations, such as creating a `set` and then iterating over the data again to count the occurrences. The `Counter` class eliminates these redundant operations.
-
-By using the `Counter` class, we can simplify the code, reduce computational complexity, and minimize memory usage, making the code more sustainable and efficient.
-'''
