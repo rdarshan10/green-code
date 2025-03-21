@@ -1,15 +1,15 @@
-import numba
+import math
 
-@numba.jit
 def efficient_function(data):
     """
     This function filters even numbers efficiently.
     """
-    return (x for x in data if not x % 2)
+    return (x for x in range(data // 2, data, 2))
 
 def main():
-    result = efficient_function(range(1000))
-    print(f"Number of even numbers: {sum(1 for _ in result)}")
+    data = 1000
+    result = efficient_function(data)
+    print(f"Number of even numbers: {data // 2}")
 
 if __name__ == "__main__":
     main()
