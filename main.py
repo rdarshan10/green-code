@@ -195,7 +195,7 @@ def analyze_and_update_code_for_sustainability(file_path, api_key_file="api_key.
         changes = [line[2:] for line in diff if line.startswith('+ ') or line.startswith('- ')]
 
         code_to_analyze = '\n'.join(changes)
-        print(f"  INFO: Analyzing only changed lines ({len(changes)} lines) to save tokens")
+        print(f"  INFO: Analyzing only **{len(changes)} changed lines** to save tokens") # Modified print statement
 
         prompt = f"""
         Role: You are a highly experienced software engineer specializing in sustainable and efficient coding practices.
@@ -250,7 +250,7 @@ def analyze_and_update_code_for_sustainability(file_path, api_key_file="api_key.
         print(f"  Request size: {len(prompt)} characters")
         if is_modified_file:
             if changes_only:
-                print(f"  INFO: Sending only code changes to save tokens")
+                print(f"  INFO: Sending **only code changes** to save tokens") # Modified print statement
             else:
                 print(f"  INFO: Including both original and modified versions")
 
