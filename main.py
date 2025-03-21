@@ -8,7 +8,6 @@ import subprocess
 import os
 import sys
 import argparse
-import difflib  # Import difflib for creating diffs
 
 def get_api_key(api_key_file="api_key.txt"):
     """
@@ -130,6 +129,7 @@ def analyze_code_changes(file_path):
             print("  WARNING: No changes detected between HEAD and staged versions")
             return None
 
+        import difflib
         d = difflib.Differ()
         diff = list(d.compare(original_content.splitlines(), staged_content.splitlines()))
 
@@ -163,13 +163,14 @@ def analyze_code_changes(file_path):
 def analyze_and_update_code_for_sustainability(file_path, api_key_file="api_key.txt", changes_only=False):
     """
     Read code from a file, analyze it with Groq for sustainability,
-    and replace the file content with the improved sustainable code, with a review step.
+    and replace the file content with the improved sustainable code.
     """
     print(f"\n===== SUSTAINABILITY ANALYSIS: {file_path} =====")
 
     # Get file content from Git
     print("\nSTEP 1: Retrieving file content")
     content_data = analyze_code_changes(file_path)
+
     if not content_data:
         print("WARNING: No content data available for analysis")
         return True
@@ -184,7 +185,6 @@ def analyze_and_update_code_for_sustainability(file_path, api_key_file="api_key.
 
     # Define the prompt for sustainability analysis
     print("\nSTEP 3: Creating analysis prompt")
-    # Determine prompt (same as before) - omitted for brevity, no changes here
 
     # Determine what to send based on changes_only flag
     if changes_only and is_modified_file:
@@ -244,7 +244,6 @@ def analyze_and_update_code_for_sustainability(file_path, api_key_file="api_key.
         Return ONLY the improved code with no explanations.
         """
 
-
     # Send request to Groq API
     print("\nSTEP 4: Sending to Groq API")
     try:
@@ -303,33 +302,37 @@ def analyze_and_update_code_for_sustainability(file_path, api_key_file="api_key.
             # For simplicity, just append the optimized changes as comments
             sustainable_code = current_content + "\n\n# SUSTAINABLE CHANGES SUGGESTED:\n'''\n" + sustainable_code + "\n'''\n"
 
-        # Compare with original to show what changed and prepare for review
+        # Compare with original to show what changed
         if file_content != sustainable_code:
-            print("\nSTEP 6: Reviewing and Applying Changes")
-            diff_lines = difflib.unified_diff(file_content.splitlines(keepends=True), sustainable_code.splitlines(keepends=True), fromfile='original', tofile='sustainable')
-            diff_text = ''.join(diff_lines)
+            import difflib
+            d = difflib.Differ()
+            diff = list(d.compare(file_content.splitlines(), sustainable_code.splitlines()))
 
-            if diff_text:
-                print("  Suggested changes (diff format):\n")
-                print(diff_text)
-            else:
-                print("  No changes suggested by the sustainability analysis.")
-                return True # No changes to apply, consider it successful
+            # Count how many lines were added, removed, or changed
+            added = len([l for l in diff if l.startswith('+ ')])
+            removed = len([l for l in diff if l.startswith('- ')])
+            changed = len([l for l in diff if l.startswith('? ')])
 
-            review_choice = input("\nApply these changes to the file? (y/N): ").strip().lower()
-            if review_choice in ['y', 'yes']:
-                # Write the improved code back to the original file
-                print("  Applying changes and updating file...")
-                with open(file_path, 'w') as output_file:
-                    output_file.write(sustainable_code)
-                print(f"  File successfully updated with sustainable code: {file_path}")
-                return True
-            else:
-                print("  Changes not applied to the file.")
-                return True # User chose not to apply, still consider it successful in terms of script execution
+            print(f"  Sustainability improvements: {added} lines added, {removed} lines removed, {changed} lines modified")
+
+            # Show the first few changes
+            changes = [l for l in diff if not l.startswith('  ')]
+            if changes:
+                print("  Sample improvements (up to 5 lines):")
+                for i, line in enumerate(changes[:5]):
+                    print(f"    {line[:100]}{'...' if len(line) > 100 else ''}")
+                if len(changes) > 5:
+                    print(f"    ... and {len(changes) - 5} more changes")
         else:
             print("  INFO: No changes made by the optimization")
-            return True # No changes, consider it successful
+
+        # Write the improved code back to the original file
+        print("\nSTEP 6: Updating file")
+        with open(file_path, 'w') as output_file:
+            output_file.write(sustainable_code)
+
+        print(f"  File successfully updated with sustainable code: {file_path}")
+        return True
 
     except Exception as e:
         print(f"  Error: {e}")
@@ -362,8 +365,8 @@ if __name__ == "__main__":
         # Restore stdout
         sys.stdout = sys.__stdout__
         if success:
-            print(f"File analysis completed. Please check verbose output for details and file changes may require manual review.") # More informative message
+            print(f"File successfully updated with sustainable code: {args.file_path}")
         else:
-            print(f"Error during sustainability analysis for {args.file_path}. Please check verbose output for details.") # More informative error message
+            print(f"Error updating {args.file_path}")
 
     exit(0 if success else 1)

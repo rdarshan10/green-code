@@ -1,104 +1,22 @@
-# 1. First, create and commit an initial version of a Python file
+def inefficient_function(data):
+    """
+    This function is intentionally inefficient for demonstration.
+    It calculates squares of numbers and filters even squares.
+    """
+    squares = []
+    for x in data:
+        squares.append(x * x)
 
-# Initial version of sample_code.py
-def calculate_sum(numbers):
-    # Inefficient way to sum numbers
-    total = 0
-    for num in numbers:
-        total = total + num
-    return total
-def calculate_sum(numbers):
-    # Inefficient way to sum numbers
-    total = 0
-    for num in numbers:
-        total = total + num
-    return totaldef calculate_sum(numbers):
-    # Inefficient way to sum numbers
-    total = 0
-    for num in numbers:
-        total = total + num
-    return totaldef calculate_sum(numbers):
-    # Inefficient way to sum numbers
-    total = 0
-    for num in numbers:
-        total = total + num
-    return total
-def create_large_list():
-    # Inefficient list creation
-    result = []
-    for i in range(1000):
-        result.append(i)
-    return result
-def find_duplicates(data):
-    # Inefficient way to find duplicates
-    duplicates = []
-    for i in range(len(data)):
-        for j in range(i+1, len(data)):
-            if data[i] == data[j] and data[i] not in duplicates:
-                duplicates.append(data[i])
-    return duplicates''
-    '    return result
-def find_duplicates(data):
-    # Inefficient way to find duplicates
-    duplicates = []
-    for i in range(len(data)):
-        for j in range(i+1, len(data)):
-            if data[i] == data[j] and data[i] not in duplicates:
-                duplicates.append(data[i])
-    return duplicates
-def find_duplicates(data):
-    # Inefficient way to find duplicates
-    duplicates = []
-    for i in range(len(data)):
-        for j in range(i+1, len(data)):
-            if data[i] == data[j] and data[i] not in duplicates:
-                duplicates.append(data[i])
-    return duplicates
-def find_duplicates(data):
-    # Inefficient way to find duplicates
-    duplicates = []
-    for i in range(len(data)):
-        for j in range(i+1, len(data)):
-            if data[i] == data[j] and data[i] not in duplicates:
-                duplicates.append(data[i])
-    return duplicates
-# Also modify main() to use this function:
-def main():
-    numbers = create_large_list()
-    total = calculate_sum(numbers)
-    dupes = find_duplicates([1, 2, 3, 1, 4, 2, 5])
-    print(f"Sum: {total}")
-    print(f"Duplicates: {dupes}")
-    def main():
-    numbers = create_large_list()
-    total = calculate_sum(numbers)
-    dupes = find_duplicates([1, 2, 3, 1, 4, 2, 5])
-    print(f"Sum: {total}")
-      def main():
-    numbers = create_large_list()
-    total = calculate_sum(numbers)
-    dupes = find_duplicates([1, 2, 3, 1, 4, 2, 5])
-    print(f"Sum: {total}")
-    print(f"Duplicates: {dupes}")
-      def main():
-    numbers = create_large_list()
-    total = calculate_sum(numbers)
-    dupes = find_duplicates([1, 2, 3, 1, 4, 2, 5])
-    print(f"Sum: {total}")
-    print(f"Duplicates: {dupes}")
-    print(f"Duplicates: {dupes}")
-def main():
-    numbers = create_large_list()
-    total = calculate_sum(numbers)
-    print(f"Sum: {total}")
+    even_squares = []
+    for square in squares:
+        if square % 2 == 0:
+            even_squares.append(square)
+    return even_squares
 
-    def main():
-    numbers = create_large_list()
-    total = calculate_sum(numbers)
-    print(f"Sum: {total}")def main():
-    numbers = create_large_list()
-    total = calculate_sum(numbers)
-    print(f"Sum: {total}")
+def main():
+    numbers = list(range(1000))  # Create a list of numbers
+    result = inefficient_function(numbers)
+    print(f"Number of even squares: {len(result)}")
 
 if __name__ == "__main__":
     main()
