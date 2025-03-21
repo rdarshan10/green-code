@@ -68,10 +68,6 @@ def main():
     numbers = list(range(1000))  # Create a list of numbers
     result = inefficient_function(numbers)
     print(f"Number of even squares: {len(result)}")
-def main():
-    numbers = list(range(1000))  # Create a list of numbers
-    result = inefficient_function(numbers)
-    print(f"Number of even squares: {len(result)}")
 
 if __name__ == "__main__":
     main()
