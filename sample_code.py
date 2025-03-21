@@ -11,7 +11,15 @@ def find_duplicates(data):
             if data[i] == data[j] and data[i] not in duplicates:
                 duplicates.append(data[i])
     return duplicates
-
+    
+def find_duplicates(data):
+    # Inefficient way to find duplicates
+    duplicates = []
+    for i in range(len(data)):
+        for j in range(i+1, len(data)):
+            if data[i] == data[j] and data[i] not in duplicates:
+                duplicates.append(data[i])
+    return duplicates
 # Also modify main() to use this function:
 def main():
     numbers = create_large_list()
