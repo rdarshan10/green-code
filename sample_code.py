@@ -5,7 +5,13 @@ def create_large_list():
     return list(range(1000))
 
 def find_duplicates(data):
-    return [x for x in set(data) if data.count(x) > 1]
+    count_dict = {}
+    for num in data:
+        if num in count_dict:
+            count_dict[num] += 1
+        else:
+            count_dict[num] = 1
+    return [x for x, y in count_dict.items() if y > 1]
 
 def main():
     numbers = create_large_list()
