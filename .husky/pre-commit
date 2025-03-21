@@ -13,9 +13,9 @@ if [ -n "$STAGED_FILES" ]; then
   # Process each staged file
   echo "$STAGED_FILES" | while IFS= read -r file; do
     echo "Analyzing: $file"
-    python main.py "$file" --verbose # Or without --verbose for cleaner output in hooks
-    # python main.py "$file" --verbose --changes-only # If you want changes-only
-    # python main.py "$file" --verbose -c # Short flag for changes-only
+    python main.py "$file" --verbose --changes-only # Added --changes-only flag
+    # Alternatively you can use the short flag:
+    # python main.py "$file" --verbose -c
 
     if [ $? -ne 0 ]; then
       echo "Sustainability analysis failed for: $file"
