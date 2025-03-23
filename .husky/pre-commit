@@ -1,29 +1,29 @@
 #!/bin/sh
 # Analyze staged Python files for sustainability
-
 # Exit on first error
-EXIT_CODE=0
+set -e
 
 # Get list of staged Python files
 STAGED_FILES=$(git diff --name-only --cached -- "*.py")
-
 if [ -n "$STAGED_FILES" ]; then
   echo "Running sustainability analysis on staged Python files..."
-
+  
   # Process each staged file
   echo "$STAGED_FILES" | while IFS= read -r file; do
     echo "Analyzing: $file"
-    python main.py "$file" --verbose --changes-only # Added --changes-only flag
-    # Alternatively you can use the short flag:
-    # python main.py "$file" --verbose -c
-
-    if [ $? -ne 0 ]; then
+    python main.py "$file" --verbose --changes-only
+    
+    if [ $? -eq 0 ]; then
+      # Re-stage the file if it was updated successfully
+      git add "$file"
+      echo "File optimized and re-staged: $file"
+    else
       echo "Sustainability analysis failed for: $file"
-      EXIT_CODE=1
+      exit 1
     fi
   done
 else
   echo "No staged Python files to analyze."
 fi
 
-exit $EXIT_CODE
+exit 0
