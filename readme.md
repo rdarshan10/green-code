@@ -14,6 +14,13 @@ This tool analyzes your Python code changes during Git commits and enhances them
 - **Automatic Optimization**: Applies sustainability improvements before committing
 - **Resource-Efficient**: Minimizes API token usage by focusing only on changed code
 
+## Requirements
+
+- Python 3.6+
+- Git
+- Node.js and npm (for Husky)
+- Groq API key
+
 ## Setup Instructions
 
 ### 1. Install the main script
@@ -28,24 +35,42 @@ Create a file named `api_key.txt` in your repository root with your Groq API key
 your_groq_api_key_here
 ```
 
-### 3. Install the pre-commit hook
+### 3. Install Husky for Git hooks
 
-Save the `pre-commit` hook script to `.git/hooks/pre-commit` in your repository and make it executable:
+Husky is a modern Git hooks manager that makes it easy to run scripts when certain Git events occur.
 
 ```bash
-cp pre-commit .git/hooks/pre-commit
-chmod +x .git/hooks/pre-commit
+# Initialize npm if you haven't already
+npm init -y
+
+# Install Husky
+npm install husky --save-dev
+
+# Enable Git hooks
+npx husky install
+
+# Create a pre-commit hook
+npx husky add .husky/pre-commit "python main.py --changes-only"
+
+# Make the hook executable (if on Linux/Mac)
+chmod +x .husky/pre-commit
 ```
 
-### 4. Install dependencies
+### 4. Install Python dependencies
 
 ```bash
 pip install requests
 ```
 
+You might want to create a `requirements.txt` file:
+
+```
+requests>=2.25.0
+```
+
 ## How It Works
 
-1. When you run `git commit`, the pre-commit hook activates
+1. When you run `git commit`, the Husky pre-commit hook activates
 2. It identifies all staged Python files
 3. For each file, it:
    - Analyzes the specific changes between the staged version and HEAD
@@ -96,41 +121,11 @@ python main.py path/to/your/file.py --api_key_file custom_key.txt
 ## Troubleshooting
 
 - **API Key Issues**: Ensure your Groq API key is correctly set in `api_key.txt`
-- **Permission Denied**: Make sure the pre-commit hook is executable (`chmod +x .git/hooks/pre-commit`)
+- **Permission Denied**: Make sure the Husky hooks are executable
 - **No Files Analyzed**: Verify you've staged Python files before committing
 - **Changes Not Visible**: The hook only analyzes and optimizes *staged* changes
-
-## Pre-commit Hook Script
-
-```bash
-#!/bin/sh
-# Analyze staged Python files for sustainability
-# Exit on first error
-set -e
-# Get list of staged Python files
-STAGED_FILES=$(git diff --name-only --cached -- "*.py")
-if [ -n "$STAGED_FILES" ]; then
-  echo "Running sustainability analysis on staged Python files..."
-  
-  # Process each staged file
-  echo "$STAGED_FILES" | while IFS= read -r file; do
-    echo "Analyzing: $file"
-    python main.py "$file" --verbose --changes-only
-    
-    if [ $? -eq 0 ]; then
-      # Re-stage the file if it was updated successfully
-      git add "$file"
-      echo "✅ File optimized and re-staged: $file"
-    else
-      echo "❌ Sustainability analysis failed for: $file"
-      exit 1
-    fi
-  done
-else
-  echo "No staged Python files to analyze."
-fi
-exit 0
-```
+- **Husky Not Running**: Check that Husky is properly installed and initialized
+- **Missing package.json**: Make sure you've run `npm init` in your repository
 
 ## Benefits
 
@@ -138,6 +133,20 @@ exit 0
 - **Performance Gains**: Optimized code typically runs faster and uses fewer resources
 - **Education**: Learn sustainable coding patterns through AI recommendations
 - **Efficiency**: Save development time by automating code optimization
+
+## Custom Configuration
+
+You can customize Husky behavior by editing your `package.json` file:
+
+```json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "python main.py --changes-only"
+    }
+  }
+}
+```
 
 ## License
 
