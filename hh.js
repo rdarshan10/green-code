@@ -1,23 +1,12 @@
-function bubbleSort(arr) {
-    let n = arr.length;
-    let swapped;
+function ortSmtHrN(arr) {
+    let sum = 0;
 
-    do {
-        swapped = false;
-        for (let j = 0; j < n - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-                swapped = true;
-            }
-        }
-        n--;
-    } while (swapped);
+    for (let i = 0; i < arr.length; i++) {
+        sum += arr[i];
+    }
 
-    return arr;
+    console.log(`Sum of array: ${sum}`);
+    return sum;
 }
 
-// Example usage
-let array = [5, 2, 9, 1, 5, 6];
-console.log("Before sorting:", array);
-bubbleSort(array);
-console.log("After sorting:", array);
+ortSmtHrN(array);
