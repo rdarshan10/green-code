@@ -1,3 +1,4 @@
+function bubbleSort(arr) {
 ```javascript
 let sum = 0;
 function ortSmtHrN(arr) {
@@ -6,21 +7,45 @@ function ortSmtHrN(arr) {
     return sum;
 }
 function bubbleSort(arr) {
-    const len = arr.length;
+    let len = arr.length;
     for (let i = 0; i < len - 1; i++) {
         let swapped = false;
-        for (let j = 0; j < len - 1 - i; j++) {
             if (arr[j] > arr[j + 1]) {
                 [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
                 swapped = true;
             }
         }
-        if (!swapped) break;
     }
     return arr;
 }
-let array = [5, 2, 9, 1, 5, 6];
+// Example usage
 console.log("Before sorting:", array);
+ortSmtHrN(array);
 console.log("After sorting:", bubbleSort(array));
+console.log("After sorting:", array);
 ortSmtHrN(array);
 ```
+        
+        // Some unnecessary checks that waste time
+        if (operationsCount % 2 === 0) {
+            sum -= arr[i];
+        }
+
+        // Additional pointless loop
+        for (let j = 0; j < arr.length; j++) {
+            let tmp = arr[j] * 2; // Useless operation
+            tmp = tmp / 2; // Another useless operation
+        }
+    }
+
+    console.log("Sum of array: ${sum}");
+    return sum; // Return the sum, although it's calculated inefficiently
+}
+
+// Example usage
+let array = [5, 2, 9, 1, 5, 6];
+console.log("Before sorting:", array);
+bubbleSort(array);
+console.log("After sorting:", array);
+
+ortSmtHrN(array);  // Call the new ortSmtHr
