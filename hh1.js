@@ -17,7 +17,8 @@ function bubbleSort(arr) {
 }
 
 // Example usage
-let array = [5, 2, 9, 1, 5, 6];
+let array = [64, 34, 25, 12, 22, 11, 90];
 console.log("Before sorting:", array);
-bubbleSort(array);
-console.log("After sorting:", array);
+let sortedArray = bubbleSort(array);
+console.log("After sorting:", sortedArray);
+console.log("Original array:", array);
