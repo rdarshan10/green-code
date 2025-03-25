@@ -1,29 +1,39 @@
 #!/bin/sh
-# Analyze staged Python files for sustainability
+# Analyze staged files for sustainability
 # Exit on first error
 set -e
 
-# Get list of staged Python files
-STAGED_FILES=$(git diff --name-only --cached -- "*.py")
+# File patterns to analyze (add or remove as needed)
+FILE_PATTERNS="*.py *.js *.jsx *.ts *.tsx *.java *.c *.cpp *.h *.hpp *.cs *.go *.rb *.php *.swift *.rs *.kt *.sh"
+
+# Get list of staged files matching the patterns
+STAGED_FILES=$(git diff --name-only --cached -- $FILE_PATTERNS)
+
 if [ -n "$STAGED_FILES" ]; then
-  echo "Running sustainability analysis on staged Python files..."
+  echo "Running sustainability analysis on staged files..."
   
   # Process each staged file
   echo "$STAGED_FILES" | while IFS= read -r file; do
-    echo "Analyzing: $file"
+    # Extract file extension
+    extension="${file##*.}"
+    echo "Analyzing: $file (.$extension)"
+    
+    # Run the analysis
     python main.py "$file" --verbose --changes-only
     
     if [ $? -eq 0 ]; then
       # Re-stage the file if it was updated successfully
       git add "$file"
-      echo "File optimized and re-staged: $file"
+      echo "✅ File optimized and re-staged: $file"
     else
-      echo "Sustainability analysis failed for: $file"
+      echo "❌ Sustainability analysis failed for: $file"
       exit 1
     fi
   done
+  
+  echo "✨ All files optimized for sustainability!"
 else
-  echo "No staged Python files to analyze."
+  echo "No staged files to analyze."
 fi
 
 exit 0
