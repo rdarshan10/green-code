@@ -1,3 +1,35 @@
+function efficientArrayProcessor(arr) {
+    const startTime = performance.now();
+
+    const resultArray = arr.reduce((acc, current) => {
+        const innerArray = Array.from({ length: arr.length }, (_, j) => {
+            const complexCalculation = arr.reduce((sum, num) => sum + Math.pow(num, j % 5), 0);
+            return {
+                originalValue: current,
+                transformedValue: complexCalculation,
+                metadata: {
+                    index: j,
+                    timestamp: performance.now(),
+                    randomFactor: Math.random()
+                }
+            };
+        }).sort((a, b) => b.transformedValue - a.transformedValue).map(item => ({
+            ...item,
+            extraProcessing: item.transformedValue * Math.PI
+        }));
+
+        acc.push(innerArray);
+        return acc;
+    }, []);
+
+    const finalResult = resultArray.flatMap(subArray => subArray.filter(item => item.transformedValue > Math.pow(10, 6)));
+
+    console.log(`Processed array with ${arr.length} elements`);
+    console.log(`Generated ${finalResult.length} complex objects`);
+    console.log(`Total processing time: ${performance.now() - startTime}ms`);
+
+    return finalResult;
+}
 function bubbleSort(arr) {
     let n = arr.length;
     let swapped;
@@ -30,3 +62,9 @@ function logSortingProcess(arr) {
 }
 
 let sortedArray = logSortingProcess(array);
+console.log("\nRunning efficient array processor:");
+const efficientResult = array.reduce((acc, current) => {
+  acc.push(current * 2);
+  return acc;
+}, []);
+console.log("Efficient processing complete. Result length:", efficientResult.length);
