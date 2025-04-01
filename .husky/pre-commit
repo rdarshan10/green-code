@@ -6,21 +6,35 @@ set -e
 # File patterns to analyze (add or remove as needed)
 FILE_PATTERNS="*.py *.js *.jsx *.ts *.tsx *.java *.c *.cpp *.h *.hpp *.cs *.go *.rb *.php *.swift *.rs *.kt *.sh"
 
+# Check for environment variable set by git commit
+if [ "$ff" = "1" ]; then
+  ANALYSIS_MODE=""
+  echo "🔍 FULL FILE ANALYSIS MODE ACTIVATED 🔍"
+else
+  ANALYSIS_MODE="--changes-only"
+  echo "🔄 Changes-only analysis mode (default)"
+fi
+
 # Get list of staged files matching the patterns
 STAGED_FILES=$(git diff --name-only --cached -- $FILE_PATTERNS)
 
 if [ -n "$STAGED_FILES" ]; then
   echo "Running sustainability analysis on staged files..."
-  
+ 
   # Process each staged file
   echo "$STAGED_FILES" | while IFS= read -r file; do
     # Extract file extension
     extension="${file##*.}"
-    echo "Analyzing: $file (.$extension)"
     
-    # Run the analysis
-    python main.py "$file" --verbose --changes-only
-    
+    if [ -z "$ANALYSIS_MODE" ]; then
+      echo "Analyzing: $file (.$extension) [FULL FILE MODE]"
+    else
+      echo "Analyzing: $file (.$extension) [CHANGES ONLY]"
+    fi
+   
+    # Run the analysis with the selected mode
+    python main.py "$file" --verbose $ANALYSIS_MODE
+   
     if [ $? -eq 0 ]; then
       # Re-stage the file if it was updated successfully
       git add "$file"
@@ -30,10 +44,9 @@ if [ -n "$STAGED_FILES" ]; then
       exit 1
     fi
   done
-  
+ 
   echo "✨ All files optimized for sustainability!"
 else
   echo "No staged files to analyze."
 fi
-
 exit 0
