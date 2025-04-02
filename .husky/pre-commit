@@ -1,52 +1,83 @@
 #!/bin/sh
-# Analyze staged files for sustainability
+# Pre-commit hook to analyze staged files for sustainability
+
 # Exit on first error
 set -e
 
+# --- Configuration ---
 # File patterns to analyze (add or remove as needed)
 FILE_PATTERNS="*.py *.js *.jsx *.ts *.tsx *.java *.c *.cpp *.h *.hpp *.cs *.go *.rb *.php *.swift *.rs *.kt *.sh"
+# Path to the Python interpreter (if not in PATH or using venv)
+# PYTHON_EXEC="path/to/your/venv/bin/python"
+PYTHON_EXEC="python" # Default: assumes python is in PATH
+# Path to the main analysis script
+MAIN_SCRIPT="main.py" # Assumes it's in the repo root or accessible
+# ---------------------
 
-# Check for environment variable set by git commit
+# Determine analysis mode based on 'ff' environment variable
+# ff=1 means "Full File" analysis requested (e.g., via `git commit -a` or manual trigger)
+ANALYSIS_MODE_FLAG="" # Will hold --changes-only if applicable
+EXTRA_FLAGS=""      # Will hold --full-file-mode if applicable
+
 if [ "$ff" = "1" ]; then
-  ANALYSIS_MODE=""
-  echo "🔍 FULL FILE ANALYSIS MODE ACTIVATED 🔍"
+  ANALYSIS_MODE_DESC="FULL FILE MODE"
+  EXTRA_FLAGS="--full-file-mode" # Add the flag for the python script
 else
-  ANALYSIS_MODE="--changes-only"
-  echo "🔄 Changes-only analysis mode (default)"
+  ANALYSIS_MODE_DESC="CHANGES ONLY (Default)"
+  ANALYSIS_MODE_FLAG="--changes-only" # Add the flag for the python script
 fi
+echo "Selected Analysis Mode: $ANALYSIS_MODE_DESC"
 
 # Get list of staged files matching the patterns
-STAGED_FILES=$(git diff --name-only --cached -- $FILE_PATTERNS)
+# Using printf/while is safer for filenames with spaces or special chars
+staged_files_cmd="git diff --name-only --cached --diff-filter=ACM -- $FILE_PATTERNS" # Filter for Added, Copied, Modified
+echo "Finding staged files matching patterns..."
+STAGED_FILES=$(eval "$staged_files_cmd")
+
 
 if [ -n "$STAGED_FILES" ]; then
   echo "Running sustainability analysis on staged files..."
- 
-  # Process each staged file
-  echo "$STAGED_FILES" | while IFS= read -r file; do
-    # Extract file extension
+  # Use printf and read to handle filenames safely
+  printf "%s\n" "$STAGED_FILES" | while IFS= read -r file; do
+    # Check if file exists (it might have been deleted and staged)
+    if [ ! -f "$file" ]; then
+        echo "Skipping deleted file: $file"
+        continue
+    fi
+
     extension="${file##*.}"
-    
-    if [ -z "$ANALYSIS_MODE" ]; then
-      echo "Analyzing: $file (.$extension) [FULL FILE MODE]"
-    else
-      echo "Analyzing: $file (.$extension) [CHANGES ONLY]"
-    fi
-   
-    # Run the analysis with the selected mode
-    python main.py "$file" --verbose $ANALYSIS_MODE
-   
-    if [ $? -eq 0 ]; then
+    echo "--- Analyzing: $file (.$extension) [$ANALYSIS_MODE_DESC] ---"
+
+    # Run the analysis script with the appropriate flags
+    # Pass --verbose for detailed output during the hook run
+    "$PYTHON_EXEC" "$MAIN_SCRIPT" "$file" --verbose $ANALYSIS_MODE_FLAG $EXTRA_FLAGS
+
+    # Check the exit status of the Python script
+    script_exit_code=$?
+    if [ $script_exit_code -eq 0 ]; then
       # Re-stage the file if it was updated successfully
-      git add "$file"
-      echo "✅ File optimized and re-staged: $file"
+      # Check if the file was actually modified by the script before adding
+      # (Optional but prevents unnecessary re-adds if script made no changes)
+      if ! git diff --quiet "$file"; then
+          echo "Re-staging modified file: $file"
+          git add "$file"
+      else
+           echo "No modifications detected by script for: $file"
+      fi
+      echo "✅ Analysis successful for: $file"
     else
-      echo "❌ Sustainability analysis failed for: $file"
-      exit 1
+      echo "-----------------------------------------------------" >&2
+      echo "❌ ERROR: Sustainability analysis script failed for: $file (Exit Code: $script_exit_code)" >&2
+      echo "         Please check the errors above, fix the issues, and try committing again." >&2
+      echo "-----------------------------------------------------" >&2
+      exit 1 # Abort the commit
     fi
+    echo "--- Finished: $file ---"
   done
- 
-  echo "✨ All files optimized for sustainability!"
+
+  echo "✨ All staged files analyzed successfully!"
 else
-  echo "No staged files to analyze."
+  echo "No staged files matching patterns found to analyze."
 fi
+
 exit 0
