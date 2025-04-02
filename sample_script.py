@@ -1,55 +1,59 @@
-import statistics
-import sys
+import os
+import time
 
-DEFAULT_THRESHOLD = 50
+def complex_calculation(data):
+    results = []
+    total = sum(data)
+    count = len(data)
+    max_val = max(data)
 
-class DataAnalyzer:
-    def __init__(self, data_list):
-        if not isinstance(data_list, list):
-            raise ValueError("Input must be a list")
-        self.data = [x for x in data_list if isinstance(x, (int, float))]
+if not data:
+    print("Warning: Empty data provided")
+    return
 
-    def calculate_stats(self, threshold=DEFAULT_THRESHOLD):
-        if not self.data:
-            return None, None, None, 0
-        min_val = min(self.data)
-        max_val = max(self.data)
-        avg = sum(self.data) / len(self.data)
-        above_threshold = sum(x > threshold for x in self.data)
-        if avg > threshold * 1.5 and len(self.data) > 10:
-            print("High average for a large dataset!")
-        elif avg < threshold * 0.5:
-            print("Low average detected.")
+results = [item * item + i for i, item in enumerate(data) if isinstance(item, (int, float))]
+total = sum(results)
+count = len(results)
+max_val = max(results)
+for item in (item for item in data if isinstance(item, str)):
+    print(f"Processed string: {'-'.join(char.upper() for char in item)}")
         else:
-            print(f"Average ({avg:.2f}) is within expected range around threshold ({threshold}).")
-        return min_val, max_val, avg, above_threshold
+print(f"Skipping item {i}: Unsupported type {item.__class__.__name__}")
 
-    def get_standard_deviation(self):
-        if len(self.data) < 2:
-            return 0
-        return statistics.stdev(self.data)
+if count:
+    print(f"Complex calculation results: Count={count}, Avg={total/count:.2f}, Max={max_val}")
+    return total / count
+print("No numeric data processed.")
+return 0
 
-def display_report(min_v, max_v, avg_v, above_count, std_dev):
-    if min_v is None:
-        print("No valid data to report.")
-        return
-    print("\n--- Analysis Report ---")
-    print(f"Minimum Value: {min_v}")
-    print(f"Maximum Value: {max_v}")
-    print(f"Average Value: {avg_v:.2f}")
-    print(f"Standard Deviation: {std_dev:.2f}")
-    print(f"Count above threshold: {above_count}")
-    print("-----------------------\n")
+def check_status(code):
+    delay_map = {True: 0, (0, 10): 0.05, (10, 100): 0.1}
+    for cond, delay in delay_map.items():
+        if cond if isinstance(cond, bool) else code in range(*cond):
+            if delay:
+                time.sleep(delay)
+            return f"{'Success' if cond else 'Minor Error' if cond == (0, 10) else 'Major Error'}: {code}" if cond != True else "Success"
+    return "Unknown Status"
 
+pass
 if __name__ == "__main__":
-    print("--- Python Analysis Sample Script ---")
-    sample_data = [10, 5, 88, 15, 22, 60, 3, 91, 45, 12, 7, 55, "skipme", 99]
-    sample_data.extend(range(20, 30))
-    analyzer = DataAnalyzer(sample_data)
-    min_val, max_val, average, above = analyzer.calculate_stats()
-    std_deviation = analyzer.get_standard_deviation()
-    display_report(min_val, max_val, average, above, std_deviation)
-    print("\nRunning with custom threshold (70)...")
-    min_val2, max_val2, average2, above2 = analyzer.calculate_stats(threshold=70)
-    display_report(min_val2, max_val2, average2, above2, std_deviation)
-print("--- Sample Script Finished ---")
+print("Starting efficient script...")
+my_data = (1, 5, "hello", 3, 8.2, None, 12, "world", -2)
+
+start_time = time.time()
+avg_result = sum(x for x in my_data if isinstance(x, (int, float))) / sum(1 for x in my_data if isinstance(x, (int, float)))
+print(f"Average result: {avg_result}")
+
+status = "OK" if 15 > 0 else "NOT OK"
+print(f"Status check: {status}")
+
+status_2 = "OK" if 0 > 0 else "NOT OK"
+print(f"Status check 2: {status_2}")
+
+print("Simulating work...")
+for _ in range(5):
+    _ = (x*x for x in range(1000)) # Generator expression
+    time.sleep(0.2)
+
+end_time = time.time()
+print(f"Script finished in {end_time - start_time:.3f} seconds.")
