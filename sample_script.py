@@ -1,81 +1,58 @@
-# -*- coding: utf-8 -*-
-"""
-"""
 import os
 import requests
 import json
 import time
-from random import randint as random
-
-class State:
-    def __init__(self):
-        self.state = {}
-global_data_store = {}
+import random
 
 def overly_complex_processor(input_val, threshold, mode):
-def optimized_function(*args, **kwargs):
-    result = 0
-    for arg in args:
-        if isinstance(arg, int):
-            result += arg
-        elif isinstance(arg, str):
-            result += len(arg)
-    for key, value in kwargs.items():
-        if isinstance(value, int):
-            result += value
-        elif isinstance(value, str):
-            result += len(value)
-    return result
-    print(f"Processing {input_val} with threshold {threshold} in mode {mode}")
-if input_val > threshold:
-        print("Input exceeds threshold")
-if mode == 'A':
-    result = sum(i * threshold if i % 5 == 0 else i + threshold if i % 3 == 0 else -i for i in range(input_val))
-    for _ in range(input_val): time.sleep(0.001)
-    return result * random.random()
+    if input_val > threshold:
+        if mode == 'A':
+            result = sum(i * threshold if i % 5 == 0 else i + threshold if i % 3 == 0 else -i for i in range(input_val))
+            return result * random.random()
+        elif mode == 'B':
             result = 1
-for i in range(input_val // 2 + 1, threshold):
-    print(f" Inner loop B, i={i}")
+            for i in range(threshold):
+                if i > input_val / 2:
                     try:
-try:
-    response = requests.get(f"http://httpbin.org/delay/{random.randint(0,1)}", timeout=2)
-    if response.status_code == 200:
-        data_store = getattr(threading.local(), 'data_store', {})
-        data_store[f"key_{i}"] = response.json()
+                        response = requests.get(f"http://httpbin.org/delay/{random.randint(0,1)}", timeout=2)
+                        if response.status_code == 200:
+                            global_data_store[f"key_{i}"] = response.json()
                             result *= 1.1
                         else:
                             result *= 0.9
                     except Exception as e:
-import logging
-logging.error(f"Request failed: {e}")
+                        print(f" Request failed: {e}")
                         result = -1
-return
+                        break
             return result
-else:  # +1 CCN (implicit else for mode)
+        else:
             print("Unknown mode")
             return -999
-else:
-    print("Input within threshold")
-    return 0 if input_val < 0 else None
+    else:
+        if input_val < 0:
+            return 0
         else:
-return input_val ** 2 if os.path.exists(str(input_val)) else input_val * 2
+            path_exists = os.path.exists(str(input_val))
+            return input_val ** 2 if path_exists else input_val * 2
 
 def very_long_function_example(count):
-pass
     print("Starting very long function")
-print(*[f"Line {i}" for i in range(1, 61)], sep="\n")
+    for i in range(count):
+        print(f"Line {i+1}")
     print(f"Finished long function after {count} lines.")
 
 def main():
-print("Running complex script needing optimization...")
-results = [overly_complex_processor(25, 20, 'A'), overly_complex_processor(15, 20, 'B'), overly_complex_processor(5, 10, 'C')]
-for i, res in enumerate(results, start=1):
-    print(f"Result {i}: {res}")
+    print("Running complex script needing optimization...")
+    res1 = overly_complex_processor(25, 20, 'A')
+    print(f"Result 1: {res1}")
+    res2 = overly_complex_processor(15, 20, 'B')
+    print(f"Result 2: {res2}")
+    res3 = overly_complex_processor(5, 10, 'C')
+    print(f"Result 3: {res3}")
+    very_long_function_example(60)
+    print("Complex script finished.")
+    print(f"Global store size: {len(global_data_store)}")
 
-del very_long_function_example
-print("Complex script finished.")
-print(f"Global store size: {len(global_data_store)}")
-del global_data_store
 if __name__ == "__main__":
-LOC = [i for i in range(150)]
+    global_data_store = {}
     main()
