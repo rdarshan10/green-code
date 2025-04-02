@@ -52,4 +52,4 @@ if __name__ == "__main__":
     print("\nRunning with custom threshold (70)...")
     min_val2, max_val2, average2, above2 = analyzer.calculate_stats(threshold=70)
     display_report(min_val2, max_val2, average2, above2, std_deviation)
-    print("--- Sample Script Finished ---")
+print("--- Sample Script Finished ---")
