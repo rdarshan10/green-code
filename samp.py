@@ -13,7 +13,6 @@ def simple_greeting(name: str) -> int:
 
 def check_value_complexity(value: int, threshold: int = DEFAULT_THRESHOLD) -> str:
     print(f"Checking value {value} against threshold {threshold}")
-    result = "high"
     if value < 0:
         result = "negative"
         print("Value is negative.")
@@ -23,6 +22,9 @@ def check_value_complexity(value: int, threshold: int = DEFAULT_THRESHOLD) -> st
     elif value < threshold:
         result = "medium"
         print("Value is medium.")
+    else:
+        result = "high"
+        print("Value is high.")
     if value % 2 == 0:
         print("Value is even.")
     else:
@@ -36,8 +38,8 @@ def process_data_longer_func(data_list: list):
         print("Warning: Empty data list provided to longer func.")
         return 0, 0
     print("Starting data processing in longer function...")
-    for item in data_list:
-        print(f"  Processing item: {item}")
+    for index, item in enumerate(data_list):
+        print(f"  Processing item {index}: {item}")
         if isinstance(item, int):
             if item > MAX_ITEMS:
                 print(f"    Item {item} exceeds max {MAX_ITEMS}")
@@ -57,7 +59,7 @@ def process_data_longer_func(data_list: list):
     return processed_count, error_count
 
 def build_string_efficiently(count: int) -> str:
-    return "-" + "-".join(map(str, range(count)))
+    return "-".join(map(str, range(count)))
 
 def create_list_efficiently(n: int) -> list:
     return [i * i for i in range(n) if i % 2 == 0]
@@ -80,13 +82,12 @@ if __name__ == "__main__":
     process_data_longer_func([]) # Test empty list branch
 
     print("\nTesting efficient string building:")
-    inefficient_str = build_string_efficiently(15)
-    # Only print part of it to avoid huge output
-    print(f"Efficient string (sample): ...{inefficient_str[-20:]}")
+    efficient_str = build_string_efficiently(15)
+    print(f"Efficient string (sample): ...{efficient_str[-20:]}")
 
     print("\nTesting efficient list creation:")
-    inefficient_list = create_list_efficiently(20)
-    print(f"Efficient list: {inefficient_list}")
+    efficient_list = create_list_efficiently(20)
+    print(f"Efficient list: {efficient_list}")
 
     print("\n--- Sample Script Finished ---")
     print(f"Current working directory: {os.getcwd()}")
