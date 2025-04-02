@@ -7,67 +7,59 @@ import json
 import time
 from random import randint as random
 
-from functools import lru_cache
-from math import pow
-
+class State:
+    def __init__(self):
+        self.state = {}
 global_data_store = {}
 
-@lru_cache(maxsize=None)
 def optimized_processor(input_val, threshold, mode):
+    print(f"Processing {input_val} with threshold {threshold} in mode {mode}")
     if input_val > threshold:
-        if mode == 'A':
-            result = sum(i * threshold if i % 5 == 0 else i + threshold if i % 3 == 0 else -i for i in range(input_val))
-            return result * pow(random.random(), 2)
-        elif mode == 'B':
+        print("Input exceeds threshold")
+        result = sum(i * threshold if i % 5 == 0 else i + threshold if i % 3 == 0 else -i for i in range(input_val))
+        return result * random.random()
             result = 1
-            for i in range(threshold):
-                if i > input_val / 2:
+for i in range(threshold // 2, threshold):
+    print(f" Inner loop B, i={i}")
                     try:
-                        response = requests.get(f"http://httpbin.org/delay/{random.randint(0,1)}", timeout=2)
-                        if response.status_code == 200:
-                            global_data_store[f"key_{i}"] = response.json()
+try:
+    response = requests.get(f"http://httpbin.org/delay/{random.randint(0,1)}", timeout=2)
+    if response.status_code == 200:
+        data_store = getattr(threading.local(), 'data_store', {})
+        data_store[f"key_{i}"] = response.json()
                             result *= 1.1
                         else:
                             result *= 0.9
                     except Exception as e:
-                        print(f" Request failed: {e}")
+import sys
+print(f"Request failed: {sys.exc_info()[1]}")
                         result = -1
-                        break
+return
             return result
-        else:
+else:  # +1 CCN (implicit else for mode)
             print("Unknown mode")
             return -999
-    else:
-        if input_val < 0:
-            return 0
+else:
+    print("Input within threshold")
+    return 0 if input_val < 0 else None
         else:
-            path_exists = os.path.exists(str(input_val))
-            return input_val ** 2 if path_exists else input_val * 2
+return input_val ** 2 if os.path.exists(str(input_val)) else input_val * 2
 
 def very_long_function_example(count):
+pass
     print("Starting very long function")
-    for i in range(count):
-        print(f"Line {i+1}")
+print(*[f"Line {i}" for i in range(1, 61)], sep="\n")
     print(f"Finished long function after {count} lines.")
 
 def main():
 print("Running complex script needing optimization...")
-results = [overly_complex_processor(25, 20, 'A'), overly_complex_processor(15, 20, 'B'), overly_complex_processor(5, 10, 'C')]
-for i, res in enumerate(results, start=1):
-    print(f"Result {i}: {res}")
+for args in [(25, 20, 'A'), (15, 20, 'B'), (5, 10, 'C')]:
+    res = overly_complex_processor(*args)
+    print(f"Result: {res}")
 
-del very_long_function_example
+very_long_function_example(60) 
 print("Complex script finished.")
-print(f"Global store size: {len(global_data_store)}")
-del global_data_store
+print(f"Global store size: {len(global_data_store)}"); del global_data_store
 if __name__ == "__main__":
-from collections import deque
-from itertools import islice
-
-def process_large_file(file_path):
-    with open(file_path, 'r') as f:
-        q = deque(islice(f, 100), maxlen=100)
-        while q:
-            process(q.popleft().strip())
-            q.extend(islice(f, 100 - len(q)))
+LOC = [i for i in range(150)]
     main()
