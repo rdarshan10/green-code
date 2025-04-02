@@ -2,7 +2,7 @@
 
 def simple_greeting(name: str) -> int:
     return len(name) if name else 0
-
+#abc
 def check_value_complexity(value: int, threshold: int = DEFAULT_THRESHOLD) -> str:
     result = "high"
     if value < 0:
