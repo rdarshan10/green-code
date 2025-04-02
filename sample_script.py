@@ -13,23 +13,19 @@ class State:
 global_data_store = {}
 
 def overly_complex_processor(input_val, threshold, mode):
-    if mode == 'simple':
-        return input_val > threshold
-    elif mode == 'complex':
-        if input_val > threshold:
-            if input_val % 2 == 0:
-                return True
-            else:
-                return False
-        else:
-            return False
-    elif mode == 'custom':
-        if input_val > threshold * 2:
-            return True
-        else:
-            return False
-    else:
-        raise ValueError("Invalid mode")
+def optimized_function(*args, **kwargs):
+    result = 0
+    for arg in args:
+        if isinstance(arg, int):
+            result += arg
+        elif isinstance(arg, str):
+            result += len(arg)
+    for key, value in kwargs.items():
+        if isinstance(value, int):
+            result += value
+        elif isinstance(value, str):
+            result += len(value)
+    return result
     print(f"Processing {input_val} with threshold {threshold} in mode {mode}")
 if input_val > threshold:
         print("Input exceeds threshold")
@@ -38,7 +34,7 @@ if mode == 'A':
     for _ in range(input_val): time.sleep(0.001)
     return result * random.random()
             result = 1
-for i in range(threshold // 2, threshold):
+for i in range(input_val // 2 + 1, threshold):
     print(f" Inner loop B, i={i}")
                     try:
 try:
@@ -76,9 +72,10 @@ results = [overly_complex_processor(25, 20, 'A'), overly_complex_processor(15, 2
 for i, res in enumerate(results, start=1):
     print(f"Result {i}: {res}")
 
-very_long_function_example(60) 
+del very_long_function_example
 print("Complex script finished.")
-print(f"Global store size: {len(global_data_store)}"); del global_data_store
+print(f"Global store size: {len(global_data_store)}")
+del global_data_store
 if __name__ == "__main__":
-LOC = [i for i in range(150)]  # moderate LOC, well below limit
+LOC = [i for i in range(150)]
     main()
