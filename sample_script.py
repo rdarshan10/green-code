@@ -12,12 +12,31 @@ class State:
         self.state = {}
 global_data_store = {}
 
-def optimized_processor(input_val, threshold, mode):
+def overly_complex_processor(input_val, threshold, mode):
+    if mode == 'simple':
+        return input_val > threshold
+    elif mode == 'complex':
+        if input_val > threshold:
+            if input_val % 2 == 0:
+                return True
+            else:
+                return False
+        else:
+            return False
+    elif mode == 'custom':
+        if input_val > threshold * 2:
+            return True
+        else:
+            return False
+    else:
+        raise ValueError("Invalid mode")
     print(f"Processing {input_val} with threshold {threshold} in mode {mode}")
-    if input_val > threshold:
+if input_val > threshold:
         print("Input exceeds threshold")
-        result = sum(i * threshold if i % 5 == 0 else i + threshold if i % 3 == 0 else -i for i in range(input_val))
-        return result * random.random()
+if mode == 'A':
+    result = sum(i * threshold if i % 5 == 0 else i + threshold if i % 3 == 0 else -i for i in range(input_val))
+    for _ in range(input_val): time.sleep(0.001)
+    return result * random.random()
             result = 1
 for i in range(threshold // 2, threshold):
     print(f" Inner loop B, i={i}")
@@ -31,8 +50,8 @@ try:
                         else:
                             result *= 0.9
                     except Exception as e:
-import sys
-print(f"Request failed: {sys.exc_info()[1]}")
+import logging
+logging.error(f"Request failed: {e}")
                         result = -1
 return
             return result
@@ -53,13 +72,13 @@ print(*[f"Line {i}" for i in range(1, 61)], sep="\n")
 
 def main():
 print("Running complex script needing optimization...")
-for args in [(25, 20, 'A'), (15, 20, 'B'), (5, 10, 'C')]:
-    res = overly_complex_processor(*args)
-    print(f"Result: {res}")
+results = [overly_complex_processor(25, 20, 'A'), overly_complex_processor(15, 20, 'B'), overly_complex_processor(5, 10, 'C')]
+for i, res in enumerate(results, start=1):
+    print(f"Result {i}: {res}")
 
 very_long_function_example(60) 
 print("Complex script finished.")
 print(f"Global store size: {len(global_data_store)}"); del global_data_store
 if __name__ == "__main__":
-LOC = [i for i in range(150)]
+LOC = [i for i in range(150)]  # moderate LOC, well below limit
     main()
